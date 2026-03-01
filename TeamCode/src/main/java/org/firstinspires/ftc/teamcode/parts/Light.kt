@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.parts
 import androidx.core.math.MathUtils.clamp
 import com.qualcomm.robotcore.hardware.Servo
 
-class Light(val servo: Servo) {
+class Light(val servo: Servo): Updatable {
     var on: Boolean = false
         set(value) {
             field = value
@@ -32,7 +32,7 @@ class Light(val servo: Servo) {
     }
 
     // Needs to be run for blinking
-    fun update() {
+    override fun update() {
         if (System.currentTimeMillis() <= lastBlink + (blinkInterval/2 * 1000).toInt())  {
             on = !on
         }

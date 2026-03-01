@@ -7,7 +7,7 @@ import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sign
 
-class AxonServo(val servo: CRServo, val analog: AnalogInput) {
+class AxonServo(val servo: CRServo, val analog: AnalogInput): Updatable {
     // Holds the current position of the servo
     var position: Double
         get() {
@@ -27,7 +27,7 @@ class AxonServo(val servo: CRServo, val analog: AnalogInput) {
         }
 
     // Set the power so it moves towards the target position
-    fun updatePosition() {
+    override fun update() {
         if (abs(position - targetPosition) >= 0.05) {
             servo.power = sign(targetPosition - position) * (targetPosition - position).pow(2)
         } else {

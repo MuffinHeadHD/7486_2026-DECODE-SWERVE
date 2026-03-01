@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.parts.Intake
 import org.firstinspires.ftc.teamcode.parts.Light
 import org.firstinspires.ftc.teamcode.parts.Spindexer
 import org.firstinspires.ftc.teamcode.parts.Turret
+import org.firstinspires.ftc.teamcode.parts.Updatable
 
 class Robot(opMode: OpMode) {
     var lf: DcMotor
@@ -45,6 +46,8 @@ class Robot(opMode: OpMode) {
     var intake: Intake
     var turret: Turret
     var spindexer: Spindexer
+
+    var updateables: Array<Updatable>
 
     init {
         val hardwareMap: HardwareMap = opMode.hardwareMap
@@ -99,5 +102,11 @@ class Robot(opMode: OpMode) {
         intake = Intake(intakeServo)
         turret = Turret(limelight, turretMotor, flywheelMotor)
         spindexer = Spindexer(spindexerServo, spindexerDistance, spindexerColor, spindexerLight, spindexerMagnet)
+
+        updateables = arrayOf(spindexerServo, spindexerLight)
+    }
+
+    fun update() {
+        updateables.forEach { it.update() }
     }
 }

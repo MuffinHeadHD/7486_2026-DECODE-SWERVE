@@ -31,6 +31,8 @@ class BasicTest : LinearOpMode() {
                 robot.spindexer.startSpdxMove(1)
             }
 
+            robot.update()
+
             gamepadState1.updateGamepadState(gamepad1)
             gamepadState2.updateGamepadState(gamepad2)
         }
