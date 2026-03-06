@@ -39,7 +39,15 @@ class Turret(val limelight: Limelight3A, val turretMotor: DcMotor, val flywheelM
     private val maxVelEst = 4000.0
     private val kP_vel = 0.00030
 
+    private val PIPELINE_INDEX = 0
+
     var lastTime = System.nanoTime()
+
+    fun startLimelight() {
+        limelight.setPollRateHz(100)
+        limelight.pipelineSwitch(PIPELINE_INDEX)
+        limelight.start()
+    }
 
     override fun update() {
         val now = System.nanoTime()
