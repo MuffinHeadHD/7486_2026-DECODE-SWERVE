@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name = "CrasherBoto")
+@Autonomous(name = "Move Frontt")
 public class CrasherBoto extends LinearOpMode {
 
     private DcMotor lf;
@@ -22,8 +22,8 @@ public class CrasherBoto extends LinearOpMode {
     rb = hardwareMap.get(DcMotor.class, "rb");
 
     lf.setDirection(DcMotor.Direction.FORWARD);
-    lb.setDirection(DcMotor.Direction.REVERSE);
-    rf.setDirection(DcMotor.Direction.FORWARD);
+    lb.setDirection(DcMotor.Direction.FORWARD);
+    rf.setDirection(DcMotor.Direction.REVERSE);
     rb.setDirection(DcMotor.Direction.REVERSE);
 
     lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -39,11 +39,11 @@ public class CrasherBoto extends LinearOpMode {
         waitForStart();
 
         timer.reset();
-        if (opModeIsActive() && timer.seconds() < 2.0) {
-            lf.setPower(0.6);
-            lb.setPower(0.6);
-            rf.setPower(0.6);
-            rb.setPower(0.6);
+        while (opModeIsActive() && timer.milliseconds() < 1500.0) {
+            lf.setPower(-0.6);
+            lb.setPower(-0.6);
+            rf.setPower(-0.6);
+            rb.setPower(-0.6);
 
             telemetry.update();
         }
