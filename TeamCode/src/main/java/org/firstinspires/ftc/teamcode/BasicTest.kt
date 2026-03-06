@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode
 
+import android.graphics.Color
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.parts.IntakeMode
@@ -11,6 +12,8 @@ class BasicTest : LinearOpMode() {
 
     override fun runOpMode() {
         robot = Robot(this)
+
+        robot.turret.startLimelight()
 
         waitForStart()
 
@@ -30,6 +33,16 @@ class BasicTest : LinearOpMode() {
             if (robot.gamepadState2.right_bumper && !robot.lastGamepadState2.right_bumper) {
                 robot.spindexer.rotate(1)
             }
+
+            robot.dashboardTelemetry.addData("Lime Dist", robot.turret.limelight.latestResult.tx)
+            robot.dashboardTelemetry.addData("Turret Power", robot.turret.turretMotor.power)
+
+            val hsv = FloatArray(3)
+            Color.RGBToHSV(robot.spindexer.colorSensor.red(), robot.spindexer.colorSensor.green(), robot.spindexer.colorSensor.blue(), hsv)
+            robot.dashboardTelemetry.addData("H", hsv[0])
+            robot.dashboardTelemetry.addData("S", hsv[1])
+            robot.dashboardTelemetry.addData("V", hsv[2])
+            robot.dashboardTelemetry.update()
 
             robot.update()
 
