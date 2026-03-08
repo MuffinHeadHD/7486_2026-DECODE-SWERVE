@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.parts
 
+import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.hardware.limelightvision.LLResultTypes
 import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.hardware.DcMotor
@@ -10,6 +11,14 @@ import org.firstinspires.ftc.teamcode.rampTowards
 import org.firstinspires.ftc.teamcode.slew
 import kotlin.math.abs
 import kotlin.math.tan
+
+@Config
+class TurretConfig {
+    companion object {
+        @JvmField
+        var flywheelVelocityDelta = 0.0
+    }
+}
 
 class Turret(val limelight: Limelight3A, val turretMotor: DcMotor, val flywheelMotor: DcMotorEx) : Updatable {
 
