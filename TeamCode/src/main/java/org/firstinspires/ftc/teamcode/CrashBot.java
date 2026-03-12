@@ -31,12 +31,13 @@ public class CrashBot extends OpMode {
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
 
     @Override
     public void loop() {
         double drive = gamepad1.left_stick_y;
-        double turn = -gamepad1.right_stick_x;
+        double turn = gamepad1.right_stick_x;
         double crab = gamepad1.left_stick_x;
 
         lf.setPower(drive + turn - crab);
