@@ -25,7 +25,7 @@ class SwerbRightPIDConfig {
         @JvmField
         var right_kp = 0.0
         @JvmField
-        var right_ki = 0.0
+        var right_ki = 0.1
         @JvmField
         var right_kd = 0.0
         @JvmField
