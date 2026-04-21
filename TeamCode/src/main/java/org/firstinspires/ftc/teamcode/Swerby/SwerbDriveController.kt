@@ -14,9 +14,9 @@ import kotlin.math.hypot
 class SwerbDriveControllerPID {
     companion object {
         @JvmField
-        var kP = 0.0
+        var kP = 0.1
         @JvmField
-        var kD = 0.0
+        var kD = 0.1
     }
 }
 
