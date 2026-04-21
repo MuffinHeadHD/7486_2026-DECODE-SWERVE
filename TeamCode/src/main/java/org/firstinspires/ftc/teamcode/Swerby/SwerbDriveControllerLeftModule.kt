@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Swerby
 
 import com.acmerobotics.dashboard.config.Config
+import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
@@ -8,21 +9,10 @@ import kotlin.math.abs
 import  kotlin.math.atan2
 import kotlin.math.hypot
 
-@TeleOp
 
-@Config
-class SwerbDriveControllerPID {
-    companion object {
-        @JvmField
-        var kP = 0.1
-        @JvmField
-        var kD = 0.1
-    }
-}
-
-class SwerbDriveController (
-    public var one: DcMotor,
-    public var two: DcMotor,
+open class SwerbDriveControllerLeftModule(
+    private var one: DcMotor,
+    private var two: DcMotor,
 
     private var encoderLeft: DcMotorEx // left pod encoder
 ) {
@@ -46,7 +36,7 @@ class SwerbDriveController (
     fun calculateAngleFromController(x: Double, y: Double): Double {
         if (hypot(x, y) < 0.05) return 0.0
         val angleDeg = Math.toDegrees(atan2(y, x))
-        return wrapTo180(angleDeg - 90.0)
+        return wrapTo180(angleDeg)
     }
 
 
@@ -63,28 +53,28 @@ class SwerbDriveController (
 
         targetAngle = wrapTo180(targetAngle)
 
-        val currentAngle = wrapTo180(leftAngleCurrent)
+        val currentAngleLeft = wrapTo180(leftAngleCurrent)
 
 
         var adjustedDrive = drivePower
-        var delta = angleError(targetAngle, currentAngle)
+        var delta = angleError(targetAngle, currentAngleLeft)
 
         if (abs(delta) > 90.0) {
             targetAngle = wrapTo180(targetAngle + 180.0)
             adjustedDrive *= -1.0
-            delta = angleError(targetAngle, currentAngle)
+            delta = angleError(targetAngle, currentAngleLeft)
         }
 
 
         val derivative = delta - lastErrorLeft
-        val steeringPower = SwerbDriveControllerPID.kP * delta + SwerbDriveControllerPID.kD * derivative
+        val steeringPower = SwerbDriveControllerPID.Left_kP * delta + SwerbDriveControllerPID.Left_kD * derivative
         lastErrorLeft = delta
 
 
-        val left = adjustedDrive + steeringPower
-        val right = adjustedDrive - steeringPower
+        val onePower = adjustedDrive + steeringPower
+        val twoPower = adjustedDrive - steeringPower
 
-        one.setPower(left)
-        two.setPower(right)
+        one.setPower(onePower)
+        two.setPower(twoPower)
     }
 }

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 class SwerbTestingConfig {
     companion object {
         @JvmField
-        var ticks_per_rev = 28.0
+        var ticks_per_rev = 2666.0
     }
 }
 
@@ -23,6 +23,7 @@ class SwerbTestingConfig {
 public class SwerbEncoderFinder: LinearOpMode() {
 
     lateinit var encoderLeft : DcMotorEx
+    lateinit var encoderRight : DcMotorEx
 
     var dashboard: FtcDashboard = FtcDashboard.getInstance()
     var dashboardTelemetry: Telemetry = dashboard.telemetry
@@ -30,6 +31,7 @@ public class SwerbEncoderFinder: LinearOpMode() {
     override fun runOpMode() {
 
         encoderLeft = hardwareMap.get(DcMotorEx::class.java, "encoderLeft")
+        encoderRight = hardwareMap.get(DcMotorEx::class.java, "encoderRight")
 
         waitForStart();
 
@@ -37,9 +39,15 @@ public class SwerbEncoderFinder: LinearOpMode() {
             var leftAngleCurrent = (((encoderLeft.currentPosition.toDouble()) / (SwerbTestingConfig.ticks_per_rev)) * 360)
             var leftEncoderTicks = encoderLeft.currentPosition.toDouble()
 
+            var rightAngleCurrent = (((encoderRight.currentPosition.toDouble()) / (SwerbTestingConfig.ticks_per_rev)) * 360)
+            var rightEncoderTicks = encoderRight.currentPosition.toDouble()
+
             dashboardTelemetry.addData("left angle", leftAngleCurrent)
             dashboardTelemetry.addData("left encoder ticks", leftEncoderTicks)
-            dashboardTelemetry.addData("total revolutions", (leftEncoderTicks / SwerbTestingConfig.ticks_per_rev))
+            dashboardTelemetry.addData("right angle", rightAngleCurrent)
+            dashboardTelemetry.addData("right encoder ticks", rightEncoderTicks)
+            dashboardTelemetry.addData("right total revolutions", (rightEncoderTicks / SwerbTestingConfig.ticks_per_rev))
+            dashboardTelemetry.addData("left total revolutions", (leftEncoderTicks / SwerbTestingConfig.ticks_per_rev))
             dashboardTelemetry.update()
         }
     }
