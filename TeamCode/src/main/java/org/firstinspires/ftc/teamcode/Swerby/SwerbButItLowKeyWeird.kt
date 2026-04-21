@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Swerby
+/*package org.firstinspires.ftc.teamcode.Swerby
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion
 import kotlin.math.abs
+import  kotlin.math.atan2
 
-@TeleOp
 
 @Config
 class SwerbButItLowKeyWeird {
@@ -22,7 +22,7 @@ class SwerbButItLowKeyWeird {
         }
 }
 
-    @TeleOp(name = "Swerb I think")
+    @TeleOp(name = "Swerb I think", group = "Swerb Drive")
     public class Swerby : LinearOpMode() {
         lateinit var one: DcMotor
         lateinit var two: DcMotor
@@ -54,7 +54,7 @@ class SwerbButItLowKeyWeird {
 
 
             // All the random variables go here:
-            var leftPodAngle = encoderLeft.currentPosition
+            var leftPodAngle = encoderLeft.currentPosition.toDouble()
 
 
 
@@ -67,19 +67,23 @@ class SwerbButItLowKeyWeird {
                 return Angle_Of_360
             }
 
+            fun getAngleFromController(x: Double, y: Double):Double {
+                val targetAngle = getAngleFromController(x, y)
+                val angleDeg = Math.toDegrees(atan2(y, x))
+
+                return wrapTo180( (angleDeg - 90.0))
+            }
+
             fun angleError(target: Double, current: Double): Double {
                 return wrapTo180(target - current)
             }
 
-            val targetAngle = wrapTo180(angleGoal)
-
-            val noSteeringInput =
-                Math.abs(gamepad1.right_stick_x) < 0.05 && abs(gamepad1.right_stick_y) < 0.05
+            val noSteeringInput = abs(gamepad1.right_stick_x) < 0.05 && abs(gamepad1.right_stick_y) < 0.05
 
             val targetAngle = if (noSteeringInput) {
-                0.0   // home position
+                0.0
             } else {
-                calculateAngleFromController()
+                getAngleFromController(gamepad1.left_stick_x.toDouble(),-gamepad1.left_stick_y.toDouble())
             }.let { wrapTo180(it) }
 
             val currentAngle = wrapTo180(leftPodAngle)
@@ -92,9 +96,6 @@ class SwerbButItLowKeyWeird {
 
             while (opModeIsActive()) {
 
-                var drive = -gamepad1.left_stick_y
-                var turn = -gamepad1.right_stick_x
-
                 var OnePower = (drive + turn) * 1.0
                 var TwoPower = (drive - turn) * 1.0
 
@@ -105,3 +106,4 @@ class SwerbButItLowKeyWeird {
         }
 
     }
+*/
