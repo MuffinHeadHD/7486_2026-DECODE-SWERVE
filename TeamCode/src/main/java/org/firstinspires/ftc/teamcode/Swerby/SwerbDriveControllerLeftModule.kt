@@ -20,7 +20,7 @@ open class SwerbDriveControllerLeftModule(
     // All the random variables go here:
     private var lastErrorLeft = 0.0
     private val TICKS_PER_REV_FOR_POD_ENCODERS = 2666.0
-    private var leftAngleCurrent = (((encoderLeft.currentPosition.toDouble()) / (TICKS_PER_REV_FOR_POD_ENCODERS)) * 360)
+
 
     private fun wrapTo180(angle: Double): Double {
         var Angle_of_360 = angle % 360.0
@@ -52,6 +52,8 @@ open class SwerbDriveControllerLeftModule(
         }
 
         targetAngle = wrapTo180(targetAngle)
+
+        var leftAngleCurrent = (((encoderLeft.currentPosition.toDouble()) / (TICKS_PER_REV_FOR_POD_ENCODERS)) * 360)
 
         val currentAngleLeft = wrapTo180(leftAngleCurrent)
 
