@@ -11,14 +11,8 @@ import org.firstinspires.ftc.teamcode.parts.Updatable
 import kotlin.math.hypot
 import kotlin.math.atan2
 
-@Config
-class SwerbThingConfig {
-    companion object {
-    }
-}
-
-@TeleOp(name = "SwerbTeleOpController")
-public class SwerbTeleOpController: LinearOpMode() {
+@TeleOp(name = "Swerb Encoder reset")
+public class SwerbEncoderReset: LinearOpMode() {
 
 
     lateinit var one: DcMotor
@@ -48,27 +42,8 @@ public class SwerbTeleOpController: LinearOpMode() {
         waitForStart();
 
         while (opModeIsActive()) {
-
             var leftEncoderTicks = encoderLeft.currentPosition.toDouble()
             var rightEncoderTicks = encoderRight.currentPosition.toDouble()
-
-            val x_Left = gamepad1.left_stick_x.toDouble()
-            val y_Left = -gamepad1.left_stick_y.toDouble()
-            val turn_Left = gamepad1.right_stick_x.toDouble()
-
-            val drive_Left = (hypot(gamepad1.left_stick_y.toDouble(), gamepad1.left_stick_x.toDouble())) / 2
-
-            controllerLeft.update(x_Left, y_Left, drive_Left)
-
-
-            val y_Right = gamepad1.left_stick_x.toDouble()
-            val x_Right = -gamepad1.left_stick_y.toDouble()
-            val turn_right = gamepad1.right_stick_x.toDouble()
-
-            val drive_Right = (hypot(gamepad1.left_stick_y.toDouble(), gamepad1.left_stick_x.toDouble())) / 2
-
-            controllerRight.update(x_Right, y_Right,drive_Right)
-
 
             if (gamepad1.a) {
                 one.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
@@ -80,16 +55,11 @@ public class SwerbTeleOpController: LinearOpMode() {
                 encoderRight.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
             }
 
-
             var leftAngleCurrent = (((encoderLeft.currentPosition.toDouble()) / (SwerbTestingConfig.ticks_per_rev)) * 360)
 
             var rightAngleCurrent = (((encoderRight.currentPosition.toDouble()) / (SwerbTestingConfig.ticks_per_rev)) * 360)
 
             dashboardTelemetry.addData("left angle", leftAngleCurrent)
-            dashboardTelemetry.addData("angle from controller for right", Math.toDegrees(atan2(y_Right, x_Right)))
-            dashboardTelemetry.addData("drive_Right", drive_Right)
-            dashboardTelemetry.addData("drive_Left", drive_Left)
-            dashboardTelemetry.addData("angle from controller for left", Math.toDegrees(atan2(x_Left, y_Left)))
             dashboardTelemetry.addData("left encoder ticks",leftEncoderTicks )
             dashboardTelemetry.addData("right angle", rightAngleCurrent)
             dashboardTelemetry.addData("right encoder ticks", rightEncoderTicks)
