@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode.Swerby
 
+import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
+import org.firstinspires.ftc.robotcore.external.Telemetry
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.hypot
+import kotlin.math.sign
 
 
 open class SwerbDriveControllerLeftModule(
@@ -18,7 +21,10 @@ open class SwerbDriveControllerLeftModule(
 
     // All the random variables go here:
     val zeroLeft = encoderLeft.currentPosition.toDouble()
-    val angleDeadband = 1.0
+
+    var dashboard: FtcDashboard = FtcDashboard.getInstance()
+
+    var dashboardTelemetry: Telemetry = dashboard.telemetry
 
     val directionLeft = +1.0
 
@@ -32,12 +38,13 @@ open class SwerbDriveControllerLeftModule(
         return Angle_of_360_Left
     }
 
+
     private fun angleError(target: Double, current: Double): Double {
         return wrapTo180(target - current)
     }
 
     fun calculateAngleFromController(x: Double, y: Double): Double {
-        if (hypot(x, y) < 0.1) { return 0.0 }
+        if (hypot(x, y) < 0.05) { return 0.0 }
         val angleDegLeft = Math.toDegrees(atan2(y, x))
         return wrapTo180(angleDegLeft)
     }
@@ -45,7 +52,7 @@ open class SwerbDriveControllerLeftModule(
 
     fun update(x: Double, y: Double, drivePower: Double) {
 
-        val noSteeringInput = hypot(x, y) < 0.1
+        val noSteeringInput = hypot(x, y) < 0.05
 
 
         var targetAngleLeft = if (noSteeringInput) {
@@ -60,9 +67,9 @@ open class SwerbDriveControllerLeftModule(
 
         targetAngleLeft = wrapTo180(targetAngleLeft)
 
-        var leftAngleCurrent = (((encoderLeft.currentPosition.toDouble()) / (TICKS_PER_REV_FOR_POD_ENCODERS)) * 360)
-
+        val leftAngleCurrent = (encoderLeft.currentPosition.toDouble() / TICKS_PER_REV_FOR_POD_ENCODERS) * 360.0
         val currentAngleLeft = wrapTo180(leftAngleCurrent)
+
 
 
         var adjustedDrive = drivePower
@@ -82,14 +89,14 @@ open class SwerbDriveControllerLeftModule(
         var strafePower = SwerbDriveControllerPID.Left_kP * delta + SwerbDriveControllerPID.Left_kD * derivative
 
         if (abs(delta) > 1.0 && abs(strafePower) < 0.1) {
-            strafePower = 0.1 * Math.signum(strafePower)
+            strafePower = 0.1 * sign(strafePower)
         }
 
 
         val onePower = adjustedDrive + strafePower
         val twoPower = adjustedDrive - strafePower
 
-        one.power = twoPower
-        two.power = onePower
+        one.power = onePower
+        two.power = twoPower
     }
 }

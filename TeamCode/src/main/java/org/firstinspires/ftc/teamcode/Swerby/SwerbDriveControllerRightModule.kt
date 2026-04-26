@@ -20,10 +20,10 @@ open class SwerbDriveControllerRightModule(
     // All the random variables go here:
     val zeroRight = encoderRight.currentPosition.toDouble()
 
-    val directionRight = -1.0
+    val directionRight = +1.0
 
     private var lastErrorRight = 0.0
-    private val TICKS_PER_REV_FOR_POD_ENCODERS = 2660.0
+    private val TICKS_PER_REV_FOR_POD_ENCODERS = 2666.0
 
 
     private fun wrapTo180(angleRight: Double): Double {
@@ -38,7 +38,7 @@ open class SwerbDriveControllerRightModule(
     }
 
     fun calculateAngleFromController(x: Double, y: Double): Double {
-        if (hypot(x, y) < 0.1) { return 0.0 }
+        if (hypot(x, y) < 0.05) { return 0.0 }
         val angleDegRight = Math.toDegrees(atan2(y, x))
         return wrapTo180(angleDegRight)
     }
@@ -48,7 +48,7 @@ open class SwerbDriveControllerRightModule(
 
     public fun update(x: Double, y: Double, drivePower: Double) {
 
-        val noSteeringInput = hypot(x, y) < 0.1
+        val noSteeringInput = hypot(x, y) < 0.05
 
         var targetAngleRight = if (noSteeringInput) {
             0.0
@@ -87,7 +87,7 @@ open class SwerbDriveControllerRightModule(
         var strafePower = SwerbDriveControllerPID.Right_kP * delta + SwerbDriveControllerPID.Right_kD * derivative
 
         if (abs(delta) > 1.0 && abs(strafePower) < 0.1) {
-            strafePower = 0.05 * sign(strafePower)
+            strafePower = 0.1 * sign(strafePower)
         }
 
 

@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode.parts
 
 import com.acmerobotics.dashboard.config.Config
@@ -23,11 +24,13 @@ class SwerveDrive(
 
     var lastTime = System.nanoTime()
 
-    fun LeftModuleDriveModule(one: DcMotor, two: DcMotor, three: DcMotor, four: DcMotor, encoderLeft: DcMotorEx, encoderRight: DcMotorEx) {
+    fun LeftModuleDriveModule( three: DcMotor, four: DcMotor, encoderLeft: DcMotorEx) {
 
     }
 
     fun home(angleHome: Int) {
+        targetAngleRight = wrapTo180(angleHome)
+        targetAngleLeft = wrapTo180(angleHome)
 
     }
 
@@ -37,10 +40,10 @@ class SwerveDrive(
         lastTime = now
     }
 }
-
+*/
 /*
 
-open class SwerbDriveControllerRightModule(
+SwerbDriveControllerRightModule(
     private var three: DcMotor,
     private var four: DcMotor,
 

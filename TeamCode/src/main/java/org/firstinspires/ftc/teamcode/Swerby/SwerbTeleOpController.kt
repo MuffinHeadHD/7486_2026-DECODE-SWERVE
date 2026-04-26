@@ -14,6 +14,14 @@ import kotlin.math.atan2
 @Config
 class SwerbThingConfig {
     companion object {
+        @JvmField
+        var Left_X_sign = 1.0
+        @JvmField
+        var Left_Y_sign = 1.0
+        @JvmField
+        var Right_X_sign = -1.0
+        @JvmField
+        var Right_Y_sign = -1.0
     }
 }
 
@@ -33,10 +41,18 @@ public class SwerbTeleOpController: LinearOpMode() {
 
 
     override fun runOpMode() {
-        one = hardwareMap.get(DcMotor::class.java, "one")
-        two = hardwareMap.get(DcMotor::class.java, "two")
-        four = hardwareMap.get(DcMotor::class.java, "three")
-        three = hardwareMap.get(DcMotor::class.java, "four")
+        one = hardwareMap.get(DcMotor::class.java, "one") //left
+        two = hardwareMap.get(DcMotor::class.java, "two") //left
+        three = hardwareMap.get(DcMotor::class.java, "three") //right
+        four = hardwareMap.get(DcMotor::class.java, "four") //right
+        /*
+        one.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        two.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        three.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        four.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+
+         */
+
 
         encoderLeft = hardwareMap.get(DcMotorEx::class.java, "encoderLeft")
         encoderRight = hardwareMap.get(DcMotorEx::class.java, "encoderRight")
@@ -52,22 +68,22 @@ public class SwerbTeleOpController: LinearOpMode() {
             var leftEncoderTicks = encoderLeft.currentPosition.toDouble()
             var rightEncoderTicks = encoderRight.currentPosition.toDouble()
 
-            val x_Left = gamepad1.left_stick_x.toDouble()
-            val y_Left = -gamepad1.left_stick_y.toDouble()
+            val yLeft = ((gamepad1.left_stick_x.toDouble()) * SwerbThingConfig.Left_Y_sign)
+            val xLeft = ((gamepad1.left_stick_y.toDouble()) * SwerbThingConfig.Left_X_sign)
             val turn_Left = gamepad1.right_stick_x.toDouble()
 
             val drive_Left = (hypot(gamepad1.left_stick_y.toDouble(), gamepad1.left_stick_x.toDouble())) / 2
 
-            controllerLeft.update(x_Left, y_Left, drive_Left)
+            controllerLeft.update(xLeft, yLeft, drive_Left)
 
 
-            val y_Right = gamepad1.left_stick_x.toDouble()
-            val x_Right = -gamepad1.left_stick_y.toDouble()
+            val yRight = ((gamepad1.left_stick_x.toDouble()) * SwerbThingConfig.Right_Y_sign)
+            val xRight = ((gamepad1.left_stick_y.toDouble()) * SwerbThingConfig.Right_X_sign)
             val turn_right = gamepad1.right_stick_x.toDouble()
 
             val drive_Right = (hypot(gamepad1.left_stick_y.toDouble(), gamepad1.left_stick_x.toDouble())) / 2
 
-            controllerRight.update(x_Right, y_Right,drive_Right)
+            controllerRight.update(xRight, yRight,drive_Right)
 
 
             if (gamepad1.a) {
@@ -86,10 +102,10 @@ public class SwerbTeleOpController: LinearOpMode() {
             var rightAngleCurrent = (((encoderRight.currentPosition.toDouble()) / (SwerbTestingConfig.ticks_per_rev)) * 360)
 
             dashboardTelemetry.addData("left angle", leftAngleCurrent)
-            dashboardTelemetry.addData("angle from controller for right", Math.toDegrees(atan2(y_Right, x_Right)))
+            dashboardTelemetry.addData("angle from controller for right", Math.toDegrees(atan2(yRight, xRight)))
             dashboardTelemetry.addData("drive_Right", drive_Right)
             dashboardTelemetry.addData("drive_Left", drive_Left)
-            dashboardTelemetry.addData("angle from controller for left", Math.toDegrees(atan2(x_Left, y_Left)))
+            dashboardTelemetry.addData("angle from controller for left", Math.toDegrees(atan2(xLeft, yLeft)))
             dashboardTelemetry.addData("left encoder ticks",leftEncoderTicks )
             dashboardTelemetry.addData("right angle", rightAngleCurrent)
             dashboardTelemetry.addData("right encoder ticks", rightEncoderTicks)
