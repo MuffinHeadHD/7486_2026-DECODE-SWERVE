@@ -9,8 +9,6 @@ class SwerbDriveControllerPID {
         var Left_kP = 0.025
         @JvmField
         var Left_kD = 0.02
-        @JvmField
-        var Left_kS = 0.02
 
         @JvmField
         var Right_kP = 0.025
