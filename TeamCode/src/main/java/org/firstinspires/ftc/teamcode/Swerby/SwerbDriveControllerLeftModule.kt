@@ -43,14 +43,14 @@ open class SwerbDriveControllerLeftModule(
         return wrapTo180(target - current)
     }
 
-    fun calculateAngleFromController(x: Double, y: Double): Double {
+    fun calculateAngleFromController(x: Double, y: Double, t: Double): Double {
         if (hypot(x, y) < 0.05) { return 0.0 }
         val angleDegLeft = Math.toDegrees(atan2(y, x))
         return wrapTo180(angleDegLeft)
     }
 
 
-    fun update(x: Double, y: Double, drivePower: Double) {
+    fun update(x: Double, y: Double, drivePower: Double, t:Double) {
 
         val noSteeringInput = hypot(x, y) < 0.05
 
@@ -58,7 +58,7 @@ open class SwerbDriveControllerLeftModule(
         var targetAngleLeft = if (noSteeringInput) {
             0.0
         } else {
-            calculateAngleFromController(x, y)
+            calculateAngleFromController(x, y, t)
         }
 
         val rawTicks = encoderLeft.currentPosition.toDouble()
@@ -86,6 +86,7 @@ open class SwerbDriveControllerLeftModule(
         val derivative = delta - lastErrorLeft
         lastErrorLeft = delta
 
+        var turnPower = t
         var strafePower = SwerbDriveControllerPID.Left_kP * delta + SwerbDriveControllerPID.Left_kD * derivative
 
         if (abs(delta) > 1.0 && abs(strafePower) < 0.1) {
@@ -93,10 +94,14 @@ open class SwerbDriveControllerLeftModule(
         }
 
 
-        val onePower = adjustedDrive + strafePower
-        val twoPower = adjustedDrive - strafePower
+        val onePower = adjustedDrive + strafePower + turnPower
+        val twoPower = adjustedDrive - strafePower + turnPower
 
         one.power = onePower
         two.power = twoPower
+
+        if (onePower < 0.05) { one.power = 0.0 }
+        if (twoPower < 0.05) { two.power = 0.0 }
+
     }
 }

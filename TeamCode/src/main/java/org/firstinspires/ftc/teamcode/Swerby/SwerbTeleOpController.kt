@@ -22,6 +22,10 @@ class SwerbThingConfig {
         var Right_X_sign = -1.0
         @JvmField
         var Right_Y_sign = -1.0
+        @JvmField
+        var RightTurnSign = 1.0
+        @JvmField
+        var LeftTurnSign = -1.0
     }
 }
 
@@ -70,20 +74,32 @@ public class SwerbTeleOpController: LinearOpMode() {
 
             val yLeft = ((gamepad1.left_stick_x.toDouble()) * SwerbThingConfig.Left_Y_sign)
             val xLeft = ((gamepad1.left_stick_y.toDouble()) * SwerbThingConfig.Left_X_sign)
-            val turn_Left = gamepad1.right_stick_x.toDouble()
+            val turn_Left = ((gamepad1.right_stick_x.toDouble()) * SwerbThingConfig.LeftTurnSign)
 
             val drive_Left = (hypot(gamepad1.left_stick_y.toDouble(), gamepad1.left_stick_x.toDouble())) / 2
 
-            controllerLeft.update(xLeft, yLeft, drive_Left)
+            controllerLeft.update(xLeft,yLeft, drive_Left, turn_Left)
 
 
             val yRight = ((gamepad1.left_stick_x.toDouble()) * SwerbThingConfig.Right_Y_sign)
             val xRight = ((gamepad1.left_stick_y.toDouble()) * SwerbThingConfig.Right_X_sign)
-            val turn_right = gamepad1.right_stick_x.toDouble()
+            val turn_right = ((gamepad1.right_stick_x.toDouble()) * SwerbThingConfig.RightTurnSign)
 
             val drive_Right = (hypot(gamepad1.left_stick_y.toDouble(), gamepad1.left_stick_x.toDouble())) / 2
 
-            controllerRight.update(xRight, yRight,drive_Right)
+            controllerRight.update(xRight, yRight,drive_Right, turn_right)
+
+            if (turn_right > 0.2) {
+                turn_right * 2
+            } else {
+                turn_right * 1
+            }
+
+            if (turn_Left > 0.2) {
+                turn_Left * 2
+            } else {
+                turn_Left * 1
+            }
 
 
             if (gamepad1.a) {
