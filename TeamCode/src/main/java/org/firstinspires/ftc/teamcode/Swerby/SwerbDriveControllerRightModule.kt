@@ -85,8 +85,7 @@ open class SwerbDriveControllerRightModule(
 
 
         var turnPower = t
-        var strafePower =
-            SwerbDriveControllerPID.Right_kP * delta + SwerbDriveControllerPID.Right_kD * derivative
+        var strafePower = SwerbDriveControllerPID.Right_kP * delta + SwerbDriveControllerPID.Right_kD * derivative
 
         if (abs(delta) > 1.0 && abs(strafePower) < 0.1) {
             strafePower = 0.1 * sign(strafePower)
