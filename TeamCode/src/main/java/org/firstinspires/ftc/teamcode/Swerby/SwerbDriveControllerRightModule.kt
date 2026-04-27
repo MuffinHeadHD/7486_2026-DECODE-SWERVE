@@ -65,9 +65,7 @@ open class SwerbDriveControllerRightModule(
 
         targetAngleRight = wrapTo180(targetAngleRight)
 
-        val rightAngleCurrent =
-            (((encoderRight.currentPosition.toDouble()) / (TICKS_PER_REV_FOR_POD_ENCODERS)) * 360)
-
+        val rightAngleCurrent = (((encoderRight.currentPosition.toDouble()) / (TICKS_PER_REV_FOR_POD_ENCODERS)) * 360)
         val currentAngleRight = wrapTo180(rightAngleCurrent)
 
 
