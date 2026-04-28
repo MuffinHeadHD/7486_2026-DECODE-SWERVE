@@ -100,8 +100,5 @@ open class SwerbDriveControllerLeftModule(
         one.power = onePower
         two.power = twoPower
 
-        if (onePower < 0.05) { one.power = 0.0 }
-        if (twoPower < 0.05) { two.power = 0.0 }
-
     }
 }

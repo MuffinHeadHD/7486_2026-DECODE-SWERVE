@@ -97,8 +97,5 @@ open class SwerbDriveControllerRightModule(
 
         three.power = threePower
         four.power = fourPower
-
-        if (threePower < 0.05) { three.power = 0.0 }
-        if (fourPower < 0.05) { four.power = 0.0 }
     }
 }
